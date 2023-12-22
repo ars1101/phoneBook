@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  ContactPage(contact: a)));
+                  EditPage()));
 
       refreshContacts();
 
@@ -219,14 +219,14 @@ class EditPage extends StatelessWidget {
   late bool isNew;
   late final Contact contact;
 
-  EditPage({super.key, Contact? contact, bool? isNew}){
+  EditPage({super.key, Contact? contact, bool? isNew }){
 
     if(contact == null){
       this.contact = Contact();
-      isNew = true;
+      this.isNew = true;
     }
     else{
-      isNew = false;
+      this.isNew = false;
       this.contact = Contact();
 
     }
@@ -292,7 +292,7 @@ class EditPage extends StatelessWidget {
                     await contact.insert();
                     Navigator.of(context).pop();
                   }
-                  else{ await contact?.update();
+                  else{ await contact.update();
                   Navigator.of(context).pop();}
                 },
                 child: (Text(
