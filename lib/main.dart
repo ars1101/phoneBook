@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  EditPage()));
+                  EditPage(onSave: (){refreshContacts();},)));
 
       refreshContacts();
 
@@ -115,12 +115,13 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(contact.displayName, style: TextStyle(fontSize: 24)),
             IconButton(
                 onPressed: () async {
+                  print(contact);
 
                   await Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (BuildContext context) =>
-                              ContactPage(contact: contact)));
+                              ContactPage(contact: contact, )));
                   refreshContacts();
 
                 },
@@ -139,7 +140,11 @@ class _MyHomePageState extends State<MyHomePage> {
 class ContactPage extends StatelessWidget {
   final Contact contact;
 
+
+
   const ContactPage({super.key, required this.contact});
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +207,7 @@ class ContactPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
-                            EditPage(contact: contact)));},
+                            EditPage(contact: contact, onSave: (){})));},
                 child: (Text(
                   "Edit",
                   style: TextStyle(fontSize: 36),
@@ -218,8 +223,9 @@ class ContactPage extends StatelessWidget {
 class EditPage extends StatelessWidget {
   late bool isNew;
   late final Contact contact;
+  final Function onSave;
 
-  EditPage({super.key, Contact? contact, bool? isNew }){
+  EditPage({super.key, Contact? contact, bool? isNew, required this.onSave }){
 
     if(contact == null){
       this.contact = Contact();
@@ -227,9 +233,10 @@ class EditPage extends StatelessWidget {
     }
     else{
       this.isNew = false;
-      this.contact = Contact();
+      this.contact = contact;
 
     }
+    print(contact);
 
   }
 
@@ -237,8 +244,8 @@ class EditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController firstname = TextEditingController(
-        text: (contact.name.first != null) ? contact.name.first : "");
+    TextEditingController firstname1 = TextEditingController(
+        text: contact.name.first);
     TextEditingController lastname = TextEditingController(
         text: (contact.name.last != null) ? contact.name.last : "");
     TextEditingController number = TextEditingController(
@@ -249,7 +256,7 @@ class EditPage extends StatelessWidget {
         body: Column(
       children: [
         TextField(
-          controller: firstname,
+          controller: firstname1,
           decoration: const InputDecoration(hintText: "Имя"),
           onChanged: (value) {
             contact.name.first = value;
